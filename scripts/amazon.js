@@ -53,11 +53,15 @@ products.forEach((product)=>{
         </div>`
 });
 
+//product display gareko
 document.querySelector('.js-products-grid').innerHTML=productsHTML;
 
+//add to cart garda cart ma id ra item pathako
 document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
   button.addEventListener("click",()=>{
     const productId=button.dataset.productId;
+
+    //pailai tyo item xa ki nai hereko
     let matchedItem;
     cart.forEach((item)=>{
       if(productId===item.productId){
@@ -74,6 +78,14 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
         quantity:1
       });
     }
+
+    //total cart quantity calculate gareko
+    let cartQuantity=0;
+    cart.forEach((item=>{
+      cartQuantity+=item.quantity;
+    }))
+
+    document.querySelector('.js-cart-quantity').innerHTML=cartQuantity;
     console.log(cart);
   });
 })
