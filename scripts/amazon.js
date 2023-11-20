@@ -1,6 +1,6 @@
 //products lai data ma store garera yeta use gareko
 
-import{cart} from '../data/cart.js';
+import{cart, addToCart} from '../data/cart.js';
 import{products} from '../data/products.js';
 
 let productsHTML='';
@@ -60,46 +60,40 @@ products.forEach((product)=>{
 //product display gareko
 document.querySelector('.js-products-grid').innerHTML=productsHTML;
 
-//add to cart garda cart ma id ra item pathako
+
+function calculateCartQuantity(){
+  //total cart quantity calculate gareko
+  let cartQuantity=0;
+  cart.forEach((item=>{
+    cartQuantity+=item.quantity;
+  }))
+
+  document.querySelector('.js-cart-quantity').innerHTML=cartQuantity;
+}
+
 let timeoutId;
+function displayAddedMessage(productId){
+  //tyo added message visible banako
+  clearTimeout(timeoutId);
+  document.querySelector(`.js-added-to-cart-${productId}`).classList.add("made-visible");
+
+  //after 2 sec disapper garna
+  timeoutId=setTimeout(function(){
+    document.querySelector(`.js-added-to-cart-${productId}`).classList.remove("made-visible");
+  },2000);
+}
+
 document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
   button.addEventListener("click",()=>{
     const productId=button.dataset.productId;
     const quantitySelected=document.querySelector(`.js-selected-value-${productId}`); //tyo select bata aako value store garekoo yetaa
 
-    //tyo added message visible banako
-    clearTimeout(timeoutId);
-    document.querySelector(`.js-added-to-cart-${productId}`).classList.add("made-visible");
+    displayAddedMessage(productId);
 
-    //after 2 sec disapper garna
-    timeoutId=setTimeout(function(){document.querySelector(`.js-added-to-cart-${productId}`).classList.remove("made-visible");},2000);
+    addToCart(productId,quantitySelected);
 
-    //pailai tyo item xa ki nai hereko
-    let matchedItem;
-    cart.forEach((item)=>{
-      if(productId===item.productId){
-        matchedItem=item;
-      }
-    });
+    calculateCartQuantity();
 
-    if(matchedItem){
-      matchedItem.quantity+=Number(quantitySelected.value); //dom ley string value dinxa so tyeslai number ma lagna parxa
-    }
-    else{
-      cart.push({
-        productId:productId,
-        quantity:Number(quantitySelected.value)
-      });
-    }
-    //console.log(quantitySelected.value);
-
-    //total cart quantity calculate gareko
-    let cartQuantity=0;
-    cart.forEach((item=>{
-      cartQuantity+=item.quantity;
-    }))
-
-    document.querySelector('.js-cart-quantity').innerHTML=cartQuantity;
     console.log(cart);
   });
 })
