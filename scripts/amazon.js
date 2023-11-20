@@ -71,7 +71,7 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
     });
 
     if(matchedItem){
-      matchedItem.quantity+=Number(quantitySelected.value);
+      matchedItem.quantity+=Number(quantitySelected.value); //dom ley string value dinxa so tyeslai number ma lagna parxa
     }
     else{
       cart.push({
