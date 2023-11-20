@@ -26,7 +26,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-selected-value-${product.id}"> //each product ko seperate select hunxa so id ley chutauna
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -60,6 +60,7 @@ document.querySelector('.js-products-grid').innerHTML=productsHTML;
 document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
   button.addEventListener("click",()=>{
     const productId=button.dataset.productId;
+    const quantitySelected=document.querySelector(`.js-selected-value-${productId}`); //tyo select bata aako value store garekoo yetaa
 
     //pailai tyo item xa ki nai hereko
     let matchedItem;
@@ -70,14 +71,15 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
     });
 
     if(matchedItem){
-      matchedItem.quantity+=1;
+      matchedItem.quantity+=Number(quantitySelected.value);
     }
     else{
       cart.push({
         productId:productId,
-        quantity:1
+        quantity:Number(quantitySelected.value)
       });
     }
+    //console.log(quantitySelected.value);
 
     //total cart quantity calculate gareko
     let cartQuantity=0;
