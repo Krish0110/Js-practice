@@ -42,7 +42,7 @@ products.forEach((product)=>{
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -57,10 +57,18 @@ products.forEach((product)=>{
 document.querySelector('.js-products-grid').innerHTML=productsHTML;
 
 //add to cart garda cart ma id ra item pathako
+let timeoutId;
 document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
   button.addEventListener("click",()=>{
     const productId=button.dataset.productId;
     const quantitySelected=document.querySelector(`.js-selected-value-${productId}`); //tyo select bata aako value store garekoo yetaa
+
+    //tyo added message visible banako
+    clearTimeout(timeoutId);
+    document.querySelector(`.js-added-to-cart-${productId}`).classList.add("made-visible");
+
+    //after 2 sec disapper garna
+    timeoutId=setTimeout(function(){document.querySelector(`.js-added-to-cart-${productId}`).classList.remove("made-visible");},2000);
 
     //pailai tyo item xa ki nai hereko
     let matchedItem;
