@@ -1,11 +1,19 @@
-export let cart=[  {
-  productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-  quantity:1
-},
-{
-  productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-  quantity:1
-},];
+export let cart=JSON.parse(localStorage.getItem('cart'));
+//yo hamley default deko
+// if(!cart){
+//   cart=[  {
+//     productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+//     quantity:1
+//   },
+//   {
+//     productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+//     quantity:1
+//   },];
+// }
+
+function saveToStorage(){
+  localStorage.setItem('cart',JSON.stringify(cart));
+}
 
 //add to cart garda cart ma id ra item pathako
 export function addToCart(productId,quantitySelected){
@@ -26,6 +34,8 @@ export function addToCart(productId,quantitySelected){
       quantity:Number(quantitySelected.value)
     });
   }
+
+  saveToStorage();
 }
 
 export function removeFromCart(productId){
@@ -38,4 +48,6 @@ export function removeFromCart(productId){
   })
 
   cart=newcart;
+  
+  saveToStorage();
 }
