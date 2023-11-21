@@ -2,6 +2,7 @@
 
 import{cart, addToCart} from '../data/cart.js';
 import{products} from '../data/products.js';
+import { formatCurrency } from './utility/money.js';
 
 let productsHTML='';
 
@@ -26,7 +27,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-price">
-            $${(product.priceCents/100).toFixed(2) /* Dollar ma convert gareko ani point pachadi duita number lyauna toFixed use gareko*/ }
+            $${formatCurrency(product.priceCents) /* Dollar ma convert gareko ani point pachadi duita number lyauna toFixed use gareko*/ }
           </div>
 
           <div class="product-quantity-container">
