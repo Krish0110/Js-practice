@@ -1,10 +1,11 @@
 //products lai data ma store garera yeta use gareko
 
-import{cart, addToCart} from '../data/cart.js';
+import{cart, addToCart,calculateCartQuantity} from '../data/cart.js';
 import{products} from '../data/products.js';
 import { formatCurrency } from './utility/money.js';
 
 let productsHTML='';
+document.querySelector('.js-cart-quantity').innerHTML=calculateCartQuantity();
 
 products.forEach((product)=>{
   productsHTML+=`
@@ -61,17 +62,6 @@ products.forEach((product)=>{
 //product display gareko
 document.querySelector('.js-products-grid').innerHTML=productsHTML;
 
-
-function calculateCartQuantity(){
-  //total cart quantity calculate gareko
-  let cartQuantity=0;
-  cart.forEach((item=>{
-    cartQuantity+=item.quantity;
-  }))
-
-  document.querySelector('.js-cart-quantity').innerHTML=cartQuantity;
-}
-
 let timeoutId;
 function displayAddedMessage(productId){
   //tyo added message visible banako
@@ -93,7 +83,7 @@ document.querySelectorAll('.js-add-to-cart-btn').forEach((button)=>{
 
     addToCart(productId,quantitySelected);
 
-    calculateCartQuantity();
+    document.querySelector('.js-cart-quantity').innerHTML=calculateCartQuantity();
 
     console.log(cart);
   });

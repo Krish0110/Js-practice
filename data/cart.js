@@ -38,6 +38,17 @@ export function addToCart(productId,quantitySelected){
   saveToStorage();
 }
 
+export function calculateCartQuantity(){
+  //total cart quantity calculate gareko
+  let cartQuantity=0;
+  cart.forEach((item=>{
+    cartQuantity+=item.quantity;
+  }));
+
+  localStorage.setItem('cartQuantity',cartQuantity);
+  return cartQuantity;
+}
+
 export function removeFromCart(productId){
   const newcart=[];
 
@@ -49,5 +60,15 @@ export function removeFromCart(productId){
 
   cart=newcart;
   
+  saveToStorage();
+}
+
+export function updateCartQuantity(productId,newQuantity){
+  cart.forEach((cartItem)=>{
+    if(cartItem.productId===productId){
+      cartItem.quantity=newQuantity;
+    }
+  });
+
   saveToStorage();
 }
