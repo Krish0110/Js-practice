@@ -26,7 +26,7 @@ export function getDeliveryOption(deliveryOptionId){
       deliveryOption=option;
     }
   });
-  console.log(deliveryOption);
+ // console.log(deliveryOption);
 
   return deliveryOption;
 }

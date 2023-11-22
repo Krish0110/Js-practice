@@ -4,6 +4,7 @@ import { displayTotalCheckoutItems } from '../utility/checkoutDisplay.js';
 import { formatCurrency } from '../utility/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';//esm wala load gareko so that as modulw use garna milos
+import { renderPaymentSummary } from './paymentSummary.js';
 
 export function renderOrderSummary(){
       let cartHTML='';
@@ -104,7 +105,9 @@ export function renderOrderSummary(){
           deletedItem.remove();
 
           displayTotalCheckoutItems(calculateCartQuantity());
-        })
+
+          renderPaymentSummary();
+        });
       });
 
       document.querySelectorAll('.js-update-quantity-link').forEach((link)=>{
@@ -126,6 +129,8 @@ export function renderOrderSummary(){
           document.querySelector(`.js-quantity-label-${productId}`).innerHTML=quantity;
         
           displayTotalCheckoutItems(calculateCartQuantity());
+
+          renderPaymentSummary();
           //console.log(cart);
         }
       }
@@ -151,6 +156,7 @@ export function renderOrderSummary(){
           const deliveryOptionId=element.dataset.deliveryOptionId;
           updateDeliveryOption(productId,deliveryOptionId);
           renderOrderSummary();
+          renderPaymentSummary();
         })
       });
 }
