@@ -1,6 +1,6 @@
 import{cart, removeFromCart,calculateCartQuantity, updateCartQuantity,updateDeliveryOption} from '../../data/cart.js';
 import { getProduct, products } from '../../data/products.js';
-import { displayTotalCheckoutItems } from '../utility/checkoutDisplay.js';
+import { renderCheckoutHeader } from '../utility/checkoutHeader.js';
 import { formatCurrency } from '../utility/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';//esm wala load gareko so that as modulw use garna milos
@@ -44,7 +44,7 @@ export function renderOrderSummary(){
                             <span class="update-quantity-link link-primary js-update-quantity-link" data-product-id=${matchingItem.id}>
                               Update
                             </span>
-                            <input class="quantity-input js-quantity-input-${matchingItem.id}">
+                            <input class="quantity-input js-quantity-input js-quantity-input-${matchingItem.id}" data-product-id=${matchingItem.id}>
                             <span class="save-quantity-link link-primary js-save-quantity-link" data-product-id=${matchingItem.id}>Save</span>
                             <span class="delete-quantity-link link-primary js-delete-quantity-link" data-product-id=${matchingItem.id}>
                               Delete
@@ -93,7 +93,7 @@ export function renderOrderSummary(){
 
       document.querySelector('.js-order-summary').innerHTML=cartHTML;
 
-      displayTotalCheckoutItems(calculateCartQuantity());
+      //displayTotalCheckoutItems(calculateCartQuantity());
 
       document.querySelectorAll('.js-delete-quantity-link').forEach((link)=>{
         link.addEventListener('click',()=>{
@@ -101,10 +101,14 @@ export function renderOrderSummary(){
           removeFromCart(productId);
 
           //Html bata remove gareko
-          const deletedItem=document.querySelector(`.js-cart-item-container-${productId}`);
-          deletedItem.remove();
+          // const deletedItem=document.querySelector(`.js-cart-item-container-${productId}`);
+          // deletedItem.remove();
 
-          displayTotalCheckoutItems(calculateCartQuantity());
+          // displayTotalCheckoutItems(calculateCartQuantity());
+           renderCheckoutHeader();
+
+          //mathiko ni milxa tara yesley chai pura html reload garxa
+          renderOrderSummary();
 
           renderPaymentSummary();
         });
@@ -128,7 +132,8 @@ export function renderOrderSummary(){
 
           document.querySelector(`.js-quantity-label-${productId}`).innerHTML=quantity;
         
-          displayTotalCheckoutItems(calculateCartQuantity());
+          // displayTotalCheckoutItems(calculateCartQuantity());
+          renderCheckoutHeader();
 
           renderPaymentSummary();
           //console.log(cart);
@@ -141,20 +146,21 @@ export function renderOrderSummary(){
         })
       });
 
-      document.querySelector('body').addEventListener('keydown',(event)=>{
-        if(event.key==='Enter'){
-          document.querySelectorAll('.js-save-quantity-link').forEach((link)=>{
-              const productId=link.dataset.productId;
-              workingSavebutton(productId);
-            })
-        }
-      });
+      document.querySelectorAll('.js-quantity-input').forEach((link)=>{
+        link.addEventListener('keydown',(event)=>{
+          if(event.key==='Enter'){
+            const productId=link.dataset.productId;
+            workingSavebutton(productId);
+          }
+      })
+    });
 
       document.querySelectorAll('.js-delivery-option').forEach((element)=>{
         element.addEventListener('click',()=>{
           const productId=element.dataset.productId;
           const deliveryOptionId=element.dataset.deliveryOptionId;
           updateDeliveryOption(productId,deliveryOptionId);
+          renderCheckoutHeader();
           renderOrderSummary();
           renderPaymentSummary();
         })
